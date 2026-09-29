@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Избранные товары KRASKU.RU.">
+  <title>Избранное — KRASKU.RU</title>
+  <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="favorites">
+  <a class="skip-link" href="#main">К содержанию</a>
+  <div data-slot="header"></div>
+
+  <main id="main">
+    <nav class="container" aria-label="Хлебные крошки">
+      <ol class="breadcrumbs">
+        <li><a href="index.html">Главная</a></li>
+        <li><a href="account.html">Личный кабинет</a></li>
+        <li aria-current="page">Избранное</li>
+      </ol>
+    </nav>
+
+    <section class="page-head container">
+      <span class="eyebrow">Личный кабинет</span>
+      <h1>Избранные товары</h1>
+      <p class="lead">Сохранённые материалы — список хранится в вашем браузере и не требует авторизации.</p>
+    </section>
+
+    <section class="section" aria-label="Избранные товары">
+      <div class="container" id="favoritesRoot"></div>
+    </section>
+  </main>
+
+  <div data-slot="footer"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/catalog-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/url.js?v=20260911-2"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/layout.js?v=20260915-1"></script>
+  <script src="js/filters.js?v=20260911-2"></script>
+  <script src="js/product.js"></script>
+  <script src="js/compare.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

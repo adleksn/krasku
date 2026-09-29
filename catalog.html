@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Каталог продукции KRASKU.RU: эмали, грунтовки, грунт-эмали, краски, лаки, растворители, разбавители, отвердители, термостойкие и специальные покрытия.">
+  <title>Каталог продукции — KRASKU.RU</title>
+  <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="catalog">
+  <a class="skip-link" href="#main">К содержанию</a>
+  <div data-slot="header"></div>
+
+  <main id="main">
+    <nav class="container" aria-label="Хлебные крошки">
+      <ol class="breadcrumbs">
+        <li><a href="index.html">Главная</a></li>
+        <li aria-current="page" id="bcCat">Каталог</li>
+      </ol>
+    </nav>
+
+    <section class="page-head container category-head">
+      <span class="eyebrow">Каталог</span>
+      <h1 id="catTitle">Каталог продукции</h1>
+      <p class="lead" id="catDesc">Все товары каталога</p>
+      <p class="catalog-legend" id="catCount"></p>
+      <p class="catalog-legend">Не нашли нужный материал — <button type="button" class="btn-link" data-cta="tz" style="text-decoration:underline;text-underline-offset:3px;font-weight:600">закажите по техническому заданию</button>.</p>
+      <div class="segmented catalog-mode-toggle" data-catalog-toggle role="group" aria-label="Способ подбора материалов" hidden>
+        <button type="button" data-catalog-mode="type" aria-pressed="true">По типу продукции</button>
+        <button type="button" data-catalog-mode="surface" aria-pressed="false">По типу поверхности</button>
+      </div>
+    </section>
+
+    <section class="section" id="catalogChooser" aria-label="Категории каталога" hidden>
+      <div class="container"><div class="grid-cats" id="catalogGrid"></div></div>
+    </section>
+
+    <section class="section" id="catalogProducts" aria-label="Товары каталога">
+      <div class="container">
+        <div class="catalog-layout" id="catalogLayout">
+          <aside class="catalog-filter-panel" id="filterDrawer" aria-label="Фильтры">
+            <div class="filter-head">
+              <h2>Фильтры</h2><button type="button" class="filter-clear" data-filter-reset>Очистить всё</button>
+              <button type="button" class="btn-icon filter-collapse" id="filterCollapse" aria-expanded="true" aria-label="Свернуть фильтр"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg><span class="filter-restore-label" aria-hidden="true">Фильтр</span></button>
+              <button type="button" class="btn-icon filter-close" data-filter-close aria-label="Закрыть фильтры"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+            </div>
+            <div class="filter-body" id="filterBody"></div>
+            <div class="filter-foot"><button type="button" class="btn btn-ghost" data-filter-reset>Очистить всё</button><button type="button" class="btn btn-primary" id="filterApply">Применить</button></div>
+          </aside>
+          <div class="catalog-results">
+            <div class="catalog-toolbar">
+              <button type="button" class="btn-filter" id="filterBtn" aria-haspopup="dialog" aria-controls="filterDrawer"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 3H2l8 9.46V19l4 2v-8.54Z"/></svg><span class="filter-btn-label">Фильтр</span><span class="filter-count" id="filterCount" hidden>0</span></button>
+              <label class="sort-select" for="sortSelect"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 8 4-4 4 4M7 4v16M21 16l-4 4-4-4M17 20V4"/></svg><span id="sortLabel">По популярности</span><select id="sortSelect" class="visually-hidden" aria-label="Сортировка"><option value="popular">По популярности</option><option value="price-asc">Сначала дешевле</option><option value="price-desc">Сначала дороже</option><option value="name">По алфавиту</option></select></label>
+              <span class="result-count" id="resultCount"></span>
+            </div>
+            <div class="product-grid" id="productGrid"></div>
+            <nav class="catalog-pagination" id="catalogPagination" aria-label="Страницы каталога"></nav>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="overlay" id="filterOverlay"></div>
+
+  <div data-slot="footer"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/catalog-data.js"></script>
+  <script src="js/catalog-surface-seed.js?v=20260911"></script>
+  <script src="js/api.js?v=20260911"></script>
+  <script src="js/url.js?v=20260911-2"></script>
+  <script src="js/catalog-navigation.js?v=20260911"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/layout.js?v=20260915-1"></script>
+  <script src="js/filters.js?v=20260911-2"></script>
+  <script src="js/product.js"></script>
+  <script src="js/compare.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/main.js?v=20260914-3"></script>
+</body>
+</html>

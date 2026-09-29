@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Поиск по каталогу KRASKU.RU: марка, тип продукта, подложка, назначение, растворимость.">
+  <title>Поиск — KRASKU.RU</title>
+  <link rel="icon" href="assets/brand/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="search">
+  <a class="skip-link" href="#main">К содержанию</a>
+  <div data-slot="header"></div>
+
+  <main id="main">
+    <nav class="container" aria-label="Хлебные крошки">
+      <ol class="breadcrumbs">
+        <li><a href="index.html">Главная</a></li>
+        <li aria-current="page">Поиск</li>
+      </ol>
+    </nav>
+
+    <section class="page-head container">
+      <span class="eyebrow">Поиск</span>
+      <h1>Поиск по каталогу</h1>
+      <div class="search-row" style="margin-top:22px;max-width:640px">
+        <div class="search-input-wrap" style="flex:1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--muted)"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          <input class="search-input" id="searchQuery" type="search" placeholder="Например: ПФ-115, эмаль для металла, водорастворимая…" aria-label="Поиск по каталогу" autocomplete="off">
+        </div>
+      </div>
+      <p class="search-hint" id="searchHint" style="margin-top:14px"></p>
+    </section>
+
+    <section class="section" aria-label="Результаты поиска">
+      <div class="container">
+        <div class="product-grid" id="searchResults"></div>
+        <div class="empty-state" id="searchNotFound" hidden>
+          <h3>Не нашли нужную марку?</h3>
+          <p>Оставьте заявку по техническому заданию — технолог подберёт материал, или задайте вопрос специалисту.</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <button type="button" class="btn btn-primary" data-cta="tz">Заказать по ТЗ</button>
+            <button type="button" class="btn btn-outline" data-cta="consult">Подобрать с технологом</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div data-slot="footer"></div>
+
+  <script src="js/data.js"></script>
+  <script src="js/catalog-data.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/url.js?v=20260911-2"></script>
+  <script src="js/store.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/layout.js?v=20260915-1"></script>
+  <script src="js/filters.js?v=20260911-2"></script>
+  <script src="js/product.js"></script>
+  <script src="js/compare.js"></script>
+  <script src="js/chat.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

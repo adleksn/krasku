@@ -1,0 +1,125 @@
+const clean = (value = '') => value
+  .replace(/<[^>]+>/g, ' ')
+  .replace(/&nbsp;/gi, ' ')
+  .replace(/&amp;/gi, '&')
+  .replace(/\s+/g, ' ')
+  .trim();
+
+const escapeRegex = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+function between(html, start, end = '<') {
+  const match = html.match(new RegExp(escapeRegex(start) + '([\\s\\S]{0,1600}?)' + escapeRegex(end), 'i'));
+  return match ? clean(match[1]) : '';
+}
+
+export function sitemapProducts(xml) {
+  const urls = [];
+  const seen = new Set();
+  for (const entry of xml.matchAll(/<url>([\s\S]*?)<\/url>/gi)) {
+    const body = entry[1];
+    const sourceUrl = clean((body.match(/<loc>([^<]+)<\/loc>/i) || [])[1]);
+    const imageUrl = clean((body.match(/<image:loc>([^<]+)<\/image:loc>/i) || [])[1]);
+    if (!sourceUrl || !imageUrl || !/^https:\/\/krasku\.ru\//.test(sourceUrl) || seen.has(sourceUrl)) continue;
+    const pathname = new URL(sourceUrl).pathname;
+    const slug = decodeURIComponent(pathname).replace(/^\/+|\/+$/g, '');
+    if (!slug || /^(about_us|delivery|klientam|dileram|privacy|terms|moskva|contacts?)$/i.test(slug)) continue;
+    seen.add(sourceUrl);
+    urls.push({ sourceUrl, imageUrl, slug });
+  }
+  return urls;
+}
+
+function titleOf(html) {
+  const h1 = html.match(/<h1[^>]*>([\s\S]*?)<\/h1>/i);
+  return h1 ? clean(h1[1]) : '';
+}
+
+function numberList(text) {
+  return [...new Set([...text.matchAll(/(\d+(?:[.,]\d+)?)\s*(?:кг|л)/gi)].map(match => Number(match[1].replace(',', '.'))))];
+}
+
+function priceOf(html) {
+  const price = html.match(/(?:price[^>]*>|Цена[^\d]{0,80}|\*\s*\*\s*\*)\s*([\d\s]+)\s*(?:р\.?|₽)/i);
+  return price ? Number(price[1].replace(/\s/g, '')) : null;
+}
+
+function fieldAfter(html, label) {
+  const section = between(html, label, '<');
+  if (section) return section;
+  const raw = html.replace(/<[^>]+>/g, '\n');
+  const match = raw.match(new RegExp(escapeRegex(label) + '\\s*\\n+\\s*([^\\n]+)', 'i'));
+  return match ? clean(match[1]) : '';
+}
+
+function typeOf(name) {
+  const lower = name.toLowerCase();
+  if (lower.includes('грунт') && lower.includes('эмал')) return 'Грунт-эмаль';
+  if (lower.includes('грунтов')) return 'Грунтовка';
+  if (lower.includes('растворител')) return 'Растворитель';
+  if (lower.includes('разбавител')) return 'Разбавитель';
+  if (lower.includes('отвердител')) return 'Отвердитель';
+  if (lower.includes('лак')) return 'Лак';
+  if (lower.includes('эмал')) return 'Эмаль';
+  return 'Краска';
+}
+
+function categoryOf(name) {
+  const type = typeOf(name);
+  return ({ 'Грунт-эмаль': 'Грунт-эмали', 'Грунтовка': 'Грунтовки', 'Растворитель': 'Растворители', 'Разбавитель': 'Разбавители', 'Отвердитель': 'Отвердители', 'Лак': 'Лаки', 'Эмаль': 'Эмали' })[type] || 'Краски';
+}
+
+function surfaceTypeOf(name) {
+  if (/пропитка бетона/i.test(name)) return 'Пропитка бетона';
+  if (/по дереву/i.test(name)) return 'по дереву';
+  if (/для потолка/i.test(name)) return 'для потолка';
+  return '';
+}
+
+export function normalizeProduct(entry, html, id) {
+  const name = titleOf(html) || entry.slug;
+  const raw = clean(html);
+  const packagingBlock = (raw.match(/\*?\s*Фасовка\s*:?\s*([^*]{0,250})/i) || [])[1] || '';
+  const colorsBlock = (raw.match(/\*?\s*Цвет\s*:?\s*([^*]{0,350})/i) || [])[1] || '';
+  const descriptionTitle = html.match(/<h2[^>]*>([\s\S]*?)<\/h2>/i);
+  const firstParagraph = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+  const purpose = fieldAfter(html, 'Назначение') || 'По запросу';
+  const solubility = fieldAfter(html, 'Основа') || 'По запросу';
+  const packs = numberList(packagingBlock);
+  const colors = clean(colorsBlock).split(/[,;]+/).map(item => item.trim()).filter(Boolean).slice(0, 20);
+  const description = clean((descriptionTitle ? descriptionTitle[1] + '. ' : '') + (firstParagraph ? firstParagraph[1] : ''));
+  const extension = (entry.imageUrl.match(/\.([a-z0-9]{2,5})(?:\?|$)/i) || [, 'jpg'])[1].toLowerCase().replace('jpeg', 'jpg');
+  const image = `assets/products/${entry.slug}.${extension}`;
+  const type = typeOf(name);
+  const surfaceType = surfaceTypeOf(name);
+
+  return {
+    id,
+    slug: entry.slug,
+    sourceUrl: entry.sourceUrl,
+    name,
+    sku: String(id),
+    category: categoryOf(name),
+    brand: surfaceType ? '' : name.replace(/^(?:краска|эмаль|грунтовка|грунт-эмаль|лак|растворитель|разбавитель|отвердитель)\s+/i, '').split(/\s/).slice(0, 2).join(' ') || name,
+    type,
+    coating: 'По запросу',
+    substrate: surfaceType || 'По запросу',
+    surfaces: [],
+    purpose,
+    solubility,
+    pricePerKg: priceOf(html),
+    stock: /есть в наличии/i.test(raw),
+    packaging: packs.length ? packs : [],
+    colors,
+    colorSystems: /ral\s*\/\s*ncs|ral/i.test(raw) ? ['RAL', 'NCS'] : [],
+    paintFor: description || 'Промышленных и строительных работ',
+    description,
+    image,
+    images: [image]
+  };
+}
+
+export function renderSnapshotModule(snapshot) {
+  const payload = JSON.stringify(snapshot, null, 2)
+    .replace(/<\/script/gi, '<\\/script');
+  return `/* Generated by scripts/import-catalog.mjs. Do not edit manually. */\nwindow.KRASKU = window.KRASKU || {};\nwindow.KRASKU.catalogSnapshot = Object.freeze(${payload});\n`;
+}
