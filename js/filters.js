@@ -29,6 +29,7 @@ window.KRASKU = window.KRASKU || {};
       + '<span class="stock stock--' + (p.stock ? 'in' : 'out') + '">' + (p.stock ? 'В наличии' : 'Отсутствует') + '</span>'
       + '<div class="product-foot">'
       + '<span class="product-price">' + ns.formatPrice(p.pricePerKg) + '<small>за 1 кг</small></span>'
+      + '<button type="button" class="btn btn-sm btn-outline" data-add-request-item="' + ns.esc(p.id) + '">В список заявки</button>'
       + '</div>'
       + '</div>'
       + '</article>';
@@ -184,6 +185,24 @@ window.KRASKU = window.KRASKU || {};
         cmpBtn.classList.toggle('is-active', res.added);
         cmpBtn.setAttribute('aria-pressed', String(res.added));
         ns.toast(res.added ? 'Добавлено в сравнение' : 'Удалено из сравнения');
+        return;
+      }
+      var requestBtn = e.target.closest('[data-add-request-item]');
+      if (requestBtn) {
+        e.preventDefault();
+        var product = ns.api.getProduct(requestBtn.getAttribute('data-add-request-item'));
+        if (!product) return;
+        ns.store.addRequestItem({
+          id: product.id,
+          productId: product.id,
+          product: product.name,
+          sku: product.sku,
+          image: product.image || '',
+          pricePerKg: product.pricePerKg,
+          quantity: 1,
+          sourceUrl: ns.url('product', product.id)
+        });
+        ns.toast('Товар добавлен в список заявки');
       }
     });
   };

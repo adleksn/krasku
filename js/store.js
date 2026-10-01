@@ -12,6 +12,7 @@ window.KRASKU = window.KRASKU || {};
   var KEYS = {
     favs: 'krasku_favs',
     compare: 'krasku_compare',
+    requestList: 'krasku_request_list',
     requests: 'krasku_requests',
     messages: 'krasku_messages',
     chat: 'krasku_chat'
@@ -100,6 +101,29 @@ window.KRASKU = window.KRASKU || {};
       emit('comparechange', { added: false, count: 0 });
     },
     maxCompare: MAX_COMPARE,
+
+    /* ---------- Список заявки ---------- */
+    getRequestList: function () { return read(KEYS.requestList); },
+    addRequestItem: function (item) {
+      var arr = read(KEYS.requestList);
+      var next = Object.assign({ quantity: 1, packaging: {}, totalWeightKg: 0, totalPrice: 0 }, item || {});
+      next.id = String(next.id || next.productId || Date.now());
+      var index = arr.findIndex(function (entry) { return String(entry.id) === next.id; });
+      if (index === -1) arr.push(next); else arr[index] = Object.assign({}, arr[index], next);
+      write(KEYS.requestList, arr);
+      emit('requestlistchange', { id: next.id, count: arr.length });
+      return next;
+    },
+    removeRequestItem: function (id) {
+      var arr = read(KEYS.requestList).filter(function (entry) { return String(entry.id) !== String(id); });
+      write(KEYS.requestList, arr);
+      emit('requestlistchange', { id: String(id), count: arr.length });
+      return arr;
+    },
+    clearRequestList: function () {
+      write(KEYS.requestList, []);
+      emit('requestlistchange', { count: 0 });
+    },
 
     /* ---------- Заявки ---------- */
     getRequests: function () { return read(KEYS.requests); },

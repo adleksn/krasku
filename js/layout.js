@@ -41,6 +41,7 @@ window.KRASKU = window.KRASKU || {};
   function headerHtml() {
     var favCount = ns.store.getFavorites().length;
     var cmpCount = ns.store.getCompare().length;
+    var requestListCount = ns.store.getRequestList().length;
     return '<header class="site-header" id="siteHeader">'
       + '<div class="container header-inner">'
       + '<a class="logo" href="' + ns.url('home') + '" aria-label="KRASKU.RU — на главную">'
@@ -52,6 +53,7 @@ window.KRASKU = window.KRASKU || {};
       + '<button type="button" class="btn-icon" data-search-open aria-label="Поиск по каталогу" aria-expanded="false" aria-controls="searchBar">' + ns.ICONS.search + '</button>'
       + '<a class="btn-icon" href="' + ns.url('favorites') + '" aria-label="Избранное">' + ns.ICONS.heart + badgeHtml(favCount) + '</a>'
       + '<a class="btn-icon btn-compare" href="' + ns.url('compare') + '" aria-label="Сравнение">' + ns.ICONS.compare + badgeHtml(cmpCount) + '</a>'
+      + '<a class="btn-icon" href="' + ns.url('requestList') + '" aria-label="Список заявки">' + ns.ICONS.doc + badgeHtml(requestListCount) + '</a>'
       + '<a class="btn-icon" href="' + ns.url('account') + '" aria-label="Личный кабинет">' + ns.ICONS.user + '</a>'
       + '<button type="button" class="btn btn-primary btn-kp" data-cta="kp">Запросить счёт с НДС</button>'
       + '<button type="button" class="btn-icon burger" data-menu-open aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav">' + ns.ICONS.menu + '</button>'
@@ -72,6 +74,7 @@ window.KRASKU = window.KRASKU || {};
       + '<div class="mobile-nav-divider"></div>'
       + '<a href="' + ns.url('favorites') + '">Избранное</a>'
       + '<a href="' + ns.url('compare') + '">Сравнение</a>'
+      + '<a href="' + ns.url('requestList') + '">Список заявки</a>'
       + '<a href="' + ns.url('account') + '">Личный кабинет</a>'
       + '</nav>'
       + '<div class="mobile-nav-foot">'
@@ -264,10 +267,13 @@ window.KRASKU = window.KRASKU || {};
     function syncBadges() {
       var favs = document.querySelector('a[aria-label="Избранное"] .icon-badge');
       var cmps = document.querySelector('a[aria-label="Сравнение"] .icon-badge');
+      var requestList = document.querySelector('a[aria-label="Список заявки"] .icon-badge');
       var f = ns.store.getFavorites().length;
       var c = ns.store.getCompare().length;
+      var r = ns.store.getRequestList().length;
       if (favs) { favs.textContent = f > 0 ? (f > 9 ? '9+' : f) : ''; favs.classList.toggle('icon-badge--off', f === 0); }
       if (cmps) { cmps.textContent = c > 0 ? (c > 9 ? '9+' : c) : ''; cmps.classList.toggle('icon-badge--off', c === 0); }
+      if (requestList) { requestList.textContent = r > 0 ? (r > 9 ? '9+' : r) : ''; requestList.classList.toggle('icon-badge--off', r === 0); }
     }
     document.addEventListener('krasku:storechange', syncBadges);
 

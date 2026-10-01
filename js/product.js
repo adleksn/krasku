@@ -163,6 +163,7 @@ window.KRASKU = window.KRASKU || {};
       + '<div class="buy-meta"><p class="buy-sku">Артикул: ' + ns.esc(product.sku) + '</p><div class="buy-badges">' + stockBadge() + '</div></div>'
       + '<div class="buy-price"><span id="buyPriceValue">от ' + ns.formatPrice(product.pricePerKg) + '</span><small id="buyPriceNote">' + (typeof product.pricePerKg === 'number' ? 'за 1 кг · предварительная цена производителя' : 'стоимость уточнит менеджер') + '</small></div>'
       + '<div class="buy-cta buy-cta--order">'
+      + '<button type="button" class="btn btn-primary btn-lg" data-cta="product-add-request-item">Добавить в список заявки</button>'
       + '<button type="button" class="btn btn-primary btn-lg" data-cta="product-individual-order">Индивидуальный заказ</button>'
       + '<button type="button" class="btn btn-outline btn-lg" data-cta="product-fast-order">Быстрый заказ</button>'
       + '</div></div>'
@@ -227,6 +228,7 @@ window.KRASKU = window.KRASKU || {};
       delivery: state.delivery,
       pricePerKg: product.pricePerKg,
       totalPrice: totalPrice(),
+      quantity: Object.keys(state.packaging).reduce(function (sum, key) { return sum + (state.packaging[key] || 0); }, 0) || 1,
       url: window.location.href
     };
   }
@@ -464,6 +466,11 @@ window.KRASKU = window.KRASKU || {};
 
     /* CTA */
     document.querySelector('[data-cta="product-individual-order"]').addEventListener('click', function () { openProductRequest('Индивидуальный заказ'); });
+    document.querySelector('[data-cta="product-add-request-item"]').addEventListener('click', function () {
+      var payload = buildPayload();
+      ns.store.addRequestItem(Object.assign({}, payload, { id: product.id, sourceUrl: window.location.href }));
+      ns.toast('Товар добавлен в список заявки');
+    });
     document.querySelector('[data-cta="product-fast-order"]').addEventListener('click', function () { openProductRequest('Быстрый заказ'); });
     document.querySelector('[data-cta="product-consult"]').addEventListener('click', function () {
       ns.technologistModal();

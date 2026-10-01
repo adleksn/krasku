@@ -647,6 +647,39 @@ window.KRASKU = window.KRASKU || {};
     el.innerHTML = list.map(function (r) { return ns.requestCard(r, true); }).join('');
   }
 
+  /* ---------- Страница: Список заявки ---------- */
+  function initRequestList() {
+    var el = document.getElementById('requestListRoot');
+    if (!el) return;
+    function render() {
+      var items = ns.store.getRequestList();
+      if (!items.length) {
+        el.innerHTML = '<div class="empty-state">' + ns.ICONS.doc
+          + '<h3>Список заявки пока пуст</h3><p>Добавляйте товары из каталога или карточки товара, чтобы отправить их менеджеру одной заявкой.</p>'
+          + '<a class="btn btn-primary" href="' + ns.url('catalog') + '">Перейти в каталог</a></div>';
+        return;
+      }
+      el.innerHTML = '<div class="request-list-page">'
+        + '<div class="request-list-items">' + items.map(function (item) {
+          var packaging = item.packaging && Object.keys(item.packaging).filter(function (key) { return item.packaging[key]; }).map(function (key) { return key + ' × ' + item.packaging[key]; }).join(', ');
+          return '<article class="request-list-item">'
+            + (item.image ? '<img src="' + ns.esc(item.image) + '" alt="' + ns.esc(item.product) + '">' : '<span class="request-list-item__icon">' + ns.ICONS.box + '</span>')
+            + '<div><h2>' + ns.esc(item.product) + '</h2><p>Артикул: ' + ns.esc(item.sku || 'уточняется') + '</p>'
+            + '<p>' + ns.esc(packaging || 'Фасовка и количество уточняются менеджером') + (item.colorSystem ? ' · ' + ns.esc(item.colorSystem) : '') + '</p>'
+            + '<a class="btn btn-sm btn-outline" href="' + ns.url('product', item.productId || item.id) + '">Уточнить параметры</a></div>'
+            + '<button type="button" class="btn btn-sm btn-ghost" data-remove-request-item="' + ns.esc(item.id) + '">Убрать</button></article>';
+        }).join('') + '</div>'
+        + '<aside class="request-list-summary-card"><span class="eyebrow">Заявка менеджеру</span><h2>' + items.length + ' ' + (items.length === 1 ? 'товар' : 'товаров') + '</h2><p>Оплата на сайте не производится. После заявки менеджер уточнит параметры и подготовит предложение.</p><button type="button" class="btn btn-primary btn-lg btn-block" data-send-request-list>Оформить заявку</button></aside>'
+        + '</div>';
+      el.querySelectorAll('[data-remove-request-item]').forEach(function (button) {
+        button.addEventListener('click', function () { ns.store.removeRequestItem(button.getAttribute('data-remove-request-item')); render(); });
+      });
+      el.querySelector('[data-send-request-list]').addEventListener('click', function () { ns.requestListModal(items); });
+    }
+    render();
+    document.addEventListener('krasku:requestlistchange', render);
+  }
+
   /* ---------- Страница: Колеровка ---------- */
   function initTinting() {
     var form = document.querySelector('[data-tinting-form]');
@@ -699,6 +732,7 @@ window.KRASKU = window.KRASKU || {};
       case 'compare': initCompare(); break;
       case 'account': initAccount(); break;
       case 'requests': initRequests(); break;
+      case 'request-list': initRequestList(); break;
       case 'contacts': initContacts(); break;
       case 'chat': ns.initChat(); break;
     }

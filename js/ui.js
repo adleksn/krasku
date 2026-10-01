@@ -305,6 +305,65 @@ window.KRASKU = window.KRASKU || {};
     });
   };
 
+  /* ---------- Единая заявка по нескольким товарам ---------- */
+  ns.requestListModal = function (items) {
+    items = Array.isArray(items) ? items : [];
+    if (!items.length) { ns.toast('Добавьте хотя бы один товар в список заявки'); return; }
+    var summary = '<div class="req-summary request-list-summary">'
+      + '<b>Состав заявки</b>'
+      + items.map(function (item) {
+        var details = [];
+        if (item.sku) details.push('Артикул: ' + ns.esc(item.sku));
+        if (item.colorSystem) details.push('Цветовая система: ' + ns.esc(item.colorSystem));
+        if (item.packaging && Object.keys(item.packaging).length) details.push('Фасовки: ' + ns.esc(Object.keys(item.packaging).filter(function (key) { return item.packaging[key]; }).map(function (key) { return key + ' × ' + item.packaging[key]; }).join(', ') || 'уточняется'));
+        return '<div><strong>' + ns.esc(item.product) + '</strong><span>' + (details.join(' · ') || 'Параметры уточнит менеджер') + '</span></div>';
+      }).join('')
+      + '</div>';
+    var body = summary
+      + '<form data-request-form novalidate><div class="form-grid">'
+      + ns.field('ФИО', 'name', 'text', true)
+      + ns.field('Телефон', 'phone', 'tel', true)
+      + ns.field('Email', 'email', 'email', true)
+      + ns.field('Организация', 'org')
+      + '<div class="span-2"><fieldset class="config-group"><legend>Получение</legend><div class="config-options">'
+      + '<label class="radio config-radio"><input type="radio" name="delivery" value="Самовывоз" checked><span class="box">' + ns.ICONS.check + '</span><span>Самовывоз</span></label>'
+      + '<label class="radio config-radio"><input type="radio" name="delivery" value="Доставка"><span class="box">' + ns.ICONS.check + '</span><span>Доставка</span></label>'
+      + '</div></fieldset></div>'
+      + '<div class="span-2" data-request-list-address hidden>' + ns.field('Адрес доставки', 'address', 'text', false) + '</div>'
+      + '<div class="span-2">' + ns.field('Комментарий', 'comment', 'textarea') + '</div>'
+      + attachmentField()
+      + '</div></form>';
+    var dialog = ns.openModal({
+      title: 'Отправить заявку менеджеру',
+      desc: 'Менеджер уточнит параметры всех позиций, стоимость и условия поставки. Оплата на сайте не производится.',
+      lg: true,
+      body: body,
+      foot: '<button type="submit" class="btn btn-primary btn-lg btn-block" data-request-submit>Отправить заявку</button>'
+    });
+    var form = dialog.querySelector('[data-request-form]');
+    var address = dialog.querySelector('[data-request-list-address]');
+    var addressInput = address.querySelector('input');
+    form.addEventListener('change', function () {
+      var delivery = form.querySelector('[name="delivery"]:checked').value === 'Доставка';
+      address.hidden = !delivery;
+      addressInput.required = delivery;
+      addressInput.disabled = !delivery;
+    });
+    dialog.querySelector('[data-request-submit]').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (!ns.validateForm(form)) return;
+      var data = ns.collectForm(form);
+      ns.submitRequest(Object.assign({}, data, {
+        product: 'Заявка на несколько товаров (' + items.length + ')',
+        items: items,
+        submittedAt: new Date().toISOString(),
+        source: 'request-list'
+      }), { title: 'Заявка на несколько товаров' });
+      ns.store.clearRequestList();
+      ns.closeModal();
+    });
+  };
+
   /* ---------- Индивидуальный заказ: параметры комплекта + контакты ---------- */
   function configRadio(name, value, label, checked) {
     return '<label class="radio config-radio"><input type="radio" name="' + name + '" value="' + ns.esc(value) + '"' + (checked ? ' checked' : '') + ' required><span class="box">' + ns.ICONS.check + '</span><span>' + ns.esc(label) + '</span></label>';

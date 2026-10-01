@@ -21,6 +21,7 @@ window.KRASKU = window.KRASKU || {};
     search: function (q) { return 'search.html' + (q ? '?q=' + encodeURIComponent(q) : ''); },
     favorites: 'favorites.html',
     compare: 'compare.html',
+    requestList: 'request-list.html',
     account: 'account.html',
     requests: 'requests.html',
     chat: 'chat.html',
