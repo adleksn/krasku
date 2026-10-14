@@ -4,12 +4,13 @@ const fs = require('node:fs');
 
 const read = (file) => fs.readFileSync(file, 'utf8');
 
-test('home request forms collect the requested product type and package selection', () => {
+test('home detailed request collects the material type while the short request stays compact', () => {
   const page = read('index.html');
   const shortForm = page.match(/<form id="requestShort"[\s\S]*?<\/form>/)[0];
   const fullForm = page.match(/<form id="requestFull"[\s\S]*?<\/form>/)[0];
 
-  assert.match(shortForm, /for="req-product-type">Марка или тип материала <span class="req">\*<\/span><\/label>\s*<input id="req-product-type" name="productType" type="text" required>/);
+  assert.doesNotMatch(shortForm, /req-product-type|Марка или тип материала/);
+  assert.match(fullForm, /for="full-brand">Марка или тип материала <span class="req">\*<\/span><\/label>\s*<input id="full-brand" name="brand" type="text" placeholder="Например: Краска резиновая" required>/);
   assert.match(fullForm, /for="full-package">Выберите комплектацию<\/label>[\s\S]*?<option>Самостоятельный товар<\/option>[\s\S]*?<option>Эмаль \+ Грунт<\/option>[\s\S]*?<option>Краска \+ Грунтовка<\/option>/);
   assert.match(fullForm, /for="full-city">Место получения<\/label>\s*<input id="full-city" name="city" type="text" placeholder="Адрес терминала ТК или адрес курьеру">/);
 });
