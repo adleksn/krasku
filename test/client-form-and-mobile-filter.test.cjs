@@ -30,11 +30,13 @@ test('delivery controls consistently describe the pickup location and fast order
 test('mobile layout has a separate floating filter entry point while preserving the request button', () => {
   const layout = read('js/layout.js');
   const css = read('css/components.css');
+  const pageCss = read('css/pages.css');
   const filters = read('js/filters.js');
 
   assert.match(layout, /floating-catalog-filter/);
   assert.match(layout, /catalog\.html\?filters=1/);
   assert.match(css, /\.floating-catalog-filter/);
   assert.match(css, /@media \(max-width: 767px\)/);
+  assert.match(pageCss, /@media \(max-width: 767px\) \{[\s\S]*?\.btn-filter \{ display: none; \}/);
   assert.match(filters, /get\('filters'\) === '1' && isMobile\(\)\) openDrawer\(\)/);
 });
