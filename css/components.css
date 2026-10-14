@@ -1319,7 +1319,8 @@ body.no-scroll { overflow: hidden; }
   .floating-catalog-filter {
     position: fixed;
     left: 14px;
-    top: 50%;
+    bottom: 16px;
+    top: auto;
     z-index: 150;
     display: inline-flex;
     align-items: center;
@@ -1330,10 +1331,9 @@ body.no-scroll { overflow: hidden; }
     background: var(--graphite);
     border-radius: 50%;
     box-shadow: var(--shadow-lg);
-    transform: translateY(-50%);
     transition: background-color .2s var(--ease), transform .2s var(--ease);
   }
-  .floating-catalog-filter:hover { background: var(--graphite-900); transform: translateY(calc(-50% - 2px)); }
+  .floating-catalog-filter:hover { background: var(--graphite-900); transform: translateY(-2px); }
   .floating-catalog-filter svg { width: 21px; height: 21px; }
 }
 

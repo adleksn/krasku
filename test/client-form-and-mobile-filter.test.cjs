@@ -27,7 +27,7 @@ test('delivery controls consistently describe the pickup location and fast order
   assert.match(fastOrder, /includeProductType: false/);
 });
 
-test('mobile layout has a separate floating filter entry point while preserving the request button', () => {
+test('only the mobile catalogue shows a filter icon aligned with the request button', () => {
   const layout = read('js/layout.js');
   const css = read('css/components.css');
   const pageCss = read('css/pages.css');
@@ -35,8 +35,11 @@ test('mobile layout has a separate floating filter entry point while preserving 
 
   assert.match(layout, /floating-catalog-filter/);
   assert.match(layout, /catalog\.html\?filters=1/);
+  assert.match(layout, /currentPage\(\) === 'catalog'[\s\S]*?\? '<a class="floating-catalog-filter"/);
   assert.match(css, /\.floating-catalog-filter/);
   assert.match(css, /@media \(max-width: 767px\)/);
+  assert.match(css, /\.floating-catalog-filter \{[\s\S]*?bottom: 16px;[\s\S]*?top: auto;/);
   assert.match(pageCss, /@media \(max-width: 767px\) \{[\s\S]*?\.btn-filter \{ display: none; \}/);
+  assert.match(pageCss, /@media \(max-width: 767px\) \{[\s\S]*?\.sort-select \{ display: none; \}/);
   assert.match(filters, /get\('filters'\) === '1' && isMobile\(\)\) openDrawer\(\)/);
 });

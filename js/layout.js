@@ -158,7 +158,10 @@ window.KRASKU = window.KRASKU || {};
   }
 
   function floatingBtnHtml() {
-    return '<a class="floating-catalog-filter" href="catalog.html?filters=1" aria-label="Открыть фильтры каталога">' + ns.ICONS.filter + '</a>'
+    var catalogFilter = currentPage() === 'catalog'
+      ? '<a class="floating-catalog-filter" href="catalog.html?filters=1" aria-label="Открыть фильтры каталога">' + ns.ICONS.filter + '</a>'
+      : '';
+    return catalogFilter
       + '<button type="button" class="floating-request" data-cta="request">' + ns.ICONS.mail + '<span>Заявка</span></button>';
   }
 
