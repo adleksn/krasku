@@ -8,6 +8,7 @@
 window.KRASKU = window.KRASKU || {};
 
 (function (ns) {
+  var DIRECT_PRODUCT_CATEGORIES = ['Отвердители', 'Растворители', 'Разбавители', 'Грунт-эмали'];
   var SURFACES = [
     { slug: 'metal', name: 'Металл', prepositional: 'металлу' },
     { slug: 'wood', name: 'Дерево', prepositional: 'дереву' },
@@ -50,6 +51,7 @@ window.KRASKU = window.KRASKU || {};
     surfaceBySlug: surfaceBySlug,
     productSurfaces: productSurfaces,
     hasSurface: hasSurface,
+    requiresSurface: function (categoryName) { return DIRECT_PRODUCT_CATEGORIES.indexOf(categoryName) === -1; },
 
     availableSurfaces: function (items, categoryName) {
       return SURFACES.map(function (surface) {

@@ -892,6 +892,7 @@ body.no-scroll { overflow: hidden; }
 }
 .floating-request:hover { background: var(--graphite-900); transform: translateY(-2px); }
 .floating-request svg { width: 20px; height: 20px; }
+.floating-catalog-filter { display: none; }
 
 /* ---------- Toast ---------- */
 .toast {
@@ -1312,6 +1313,28 @@ body.no-scroll { overflow: hidden; }
   .compare-table td:first-child { position: sticky; left: 0; min-width: 150px; box-shadow: 1px 0 0 var(--border); }
   .compare-table thead th:first-child { background: var(--bg-gray); z-index: 2; }
   .compare-table td:first-child { background: #fff; z-index: 1; }
+}
+
+@media (max-width: 767px) {
+  .floating-catalog-filter {
+    position: fixed;
+    left: 14px;
+    top: 50%;
+    z-index: 150;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    color: #fff;
+    background: var(--graphite);
+    border-radius: 50%;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-50%);
+    transition: background-color .2s var(--ease), transform .2s var(--ease);
+  }
+  .floating-catalog-filter:hover { background: var(--graphite-900); transform: translateY(calc(-50% - 2px)); }
+  .floating-catalog-filter svg { width: 21px; height: 21px; }
 }
 
 @media (max-width: 420px) {

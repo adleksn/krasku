@@ -34,7 +34,7 @@ test('individual order has compact client-approved options for water and organic
   assert.match(ui, /акрил/i);
   assert.match(ui, /Самовывоз/);
   assert.match(ui, /Доставка/);
-  assert.match(ui, /Адрес доставки/);
+  assert.match(ui, /Место получения/);
   assert.match(ui, /Грунт-эмаль/);
   assert.match(ui, /Шпатлёвка/);
   assert.match(ui, /Ржавчина/);

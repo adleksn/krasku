@@ -112,6 +112,10 @@
                 <label class="field-label" for="req-email">Email <span class="req">*</span></label>
                 <input id="req-email" name="email" type="email" required>
               </div>
+              <div class="field">
+                <label class="field-label" for="req-product-type">Марка или тип материала <span class="req">*</span></label>
+                <input id="req-product-type" name="productType" type="text" required>
+              </div>
               <div class="field span-2">
                 <label class="field-label" for="req-comment">Комментарий</label>
                 <textarea id="req-comment" name="comment" placeholder="Опишите вашу задачу"></textarea>
@@ -145,13 +149,22 @@
                 <input id="full-inn" name="inn" type="text" placeholder="Заполните, если нужен счет">
               </div>
               <div class="field">
-                <label class="field-label" for="full-city">Город</label>
-                <input id="full-city" name="city" type="text" placeholder="Заполните, если нужен счет с доставкой">
+                <label class="field-label" for="full-city">Место получения</label>
+                <input id="full-city" name="city" type="text" placeholder="Адрес терминала ТК или адрес курьеру">
               </div>
             </div>
 
             <h3 style="font-size:16px;color:var(--ink);margin:26px 0 14px">Данные по продукции</h3>
             <div class="form-grid">
+              <div class="field">
+                <label class="field-label" for="full-package">Выберите комплектацию</label>
+                <select id="full-package" name="package">
+                  <option value="">Не выбрана</option>
+                  <option>Самостоятельный товар</option>
+                  <option>Эмаль + Грунт</option>
+                  <option>Краска + Грунтовка</option>
+                </select>
+              </div>
               <div class="field">
                 <label class="field-label" for="full-type">Тип продукта</label>
                 <select id="full-type" name="productType">

@@ -53,6 +53,8 @@ window.KRASKU = window.KRASKU || {};
     }).map(function (category) {
       return { card: category, href: surfaceSlug
         ? ns.catalogNavigation.resultUrl(category.slug, surfaceSlug, origin)
+        : !ns.catalogNavigation.requiresSurface(category.name)
+          ? ns.url('category', category.slug)
         : ns.api.surfaceCatalogueEnabled()
           ? ns.catalogNavigation.browseUrl('surface', { type: category.slug })
           : ns.url('category', category.slug) };

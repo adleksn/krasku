@@ -279,7 +279,9 @@ window.KRASKU = window.KRASKU || {};
       + ns.field('ФИО', 'name', 'text', true)
       + ns.field('Телефон', 'phone', 'tel', true)
       + ns.field('Email', 'email', 'email', true)
+      + (opts.includeProductType ? ns.field('Марка или тип материала', 'productType', 'text', true) : '')
       + ns.field('Организация', 'org')
+      + (opts.includeDelivery ? '<div class="span-2 field"><label class="field-label" for="f-pickupLocation">Место получения</label><input id="f-pickupLocation" name="pickupLocation" type="text" placeholder="Адрес терминала ТК или адрес курьеру"></div>' : '')
       + '<div class="span-2">' + ns.field('Комментарий', 'comment', 'textarea') + '</div>'
       + '</div></form>';
 
@@ -329,7 +331,7 @@ window.KRASKU = window.KRASKU || {};
       + '<label class="radio config-radio"><input type="radio" name="delivery" value="Самовывоз" checked><span class="box">' + ns.ICONS.check + '</span><span>Самовывоз</span></label>'
       + '<label class="radio config-radio"><input type="radio" name="delivery" value="Доставка"><span class="box">' + ns.ICONS.check + '</span><span>Доставка</span></label>'
       + '</div></fieldset></div>'
-      + '<div class="span-2" data-request-list-address hidden>' + ns.field('Адрес доставки', 'address', 'text', false) + '</div>'
+      + '<div class="span-2" data-request-list-address hidden><div class="field"><label class="field-label" for="f-address">Место получения</label><input id="f-address" name="address" type="text" placeholder="Адрес терминала ТК или адрес курьеру"></div></div>'
       + '<div class="span-2">' + ns.field('Комментарий', 'comment', 'textarea') + '</div>'
       + attachmentField()
       + '</div></form>';
@@ -438,7 +440,7 @@ window.KRASKU = window.KRASKU || {};
       + '<p class="config-intro">Выберите комплектацию — совместимые компоненты подберёт менеджер.</p>'
       + configurationFields(opts.product)
       + configGroup('Получение', configRadio('configurationDelivery', 'pickup', 'Самовывоз', true) + configRadio('configurationDelivery', 'delivery', 'Доставка'))
-      + '<div class="config-address" data-config-address hidden>' + ns.field('Адрес доставки', 'configurationAddress', 'text', false) + '</div>'
+      + '<div class="config-address" data-config-address hidden><div class="field"><label class="field-label" for="f-configurationAddress">Место получения</label><input id="f-configurationAddress" name="configurationAddress" type="text" placeholder="Адрес терминала ТК или адрес курьеру"></div></div>'
       + '</section>'
       + '<section class="config-step" data-config-step="2" hidden><h4>Контакты</h4><div class="form-grid">'
       + ns.field('ФИО', 'name', 'text', true)
@@ -546,7 +548,7 @@ window.KRASKU = window.KRASKU || {};
 
   function deliveryFields(prefix) {
     return configGroup('Получение', configRadio(prefix + 'Delivery', 'pickup', 'Без доставки', true) + configRadio(prefix + 'Delivery', 'delivery', 'С доставкой'))
-      + '<div class="config-address" data-delivery-address="' + prefix + '" hidden>' + ns.field('Адрес доставки', prefix + 'Address', 'text', false) + '</div>';
+      + '<div class="config-address" data-delivery-address="' + prefix + '" hidden><div class="field"><label class="field-label" for="f-' + prefix + 'Address">Место получения</label><input id="f-' + prefix + 'Address" name="' + prefix + 'Address" type="text" placeholder="Адрес терминала ТК или адрес курьеру"></div></div>';
   }
 
   function enableConditional(form) {

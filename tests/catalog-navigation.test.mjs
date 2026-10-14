@@ -83,3 +83,12 @@ test('result link accepts a selected surface object from the second catalogue le
     'category.html?cat=gruntovki&surface=metal&from=type'
   );
 });
+
+test('categories without a meaningful surface choice open their product listing directly', async () => {
+  const catalogue = await navigation();
+
+  for (const category of ['Отвердители', 'Растворители', 'Разбавители', 'Грунт-эмали']) {
+    assert.equal(catalogue.requiresSurface(category), false, category + ' should skip the surface chooser');
+  }
+  assert.equal(catalogue.requiresSurface('Эмали'), true);
+});

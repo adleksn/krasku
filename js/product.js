@@ -248,7 +248,9 @@ window.KRASKU = window.KRASKU || {};
       desc: 'Оставьте контакты — менеджер быстро уточнит детали.',
       lg: true,
       summary: requestSummary(),
-      payload: buildPayload()
+      payload: buildPayload(),
+      includeDelivery: true,
+      includeProductType: false
     });
   }
 

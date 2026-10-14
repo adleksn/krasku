@@ -601,6 +601,7 @@ window.KRASKU = window.KRASKU || {};
       if (!isMobile() && drawer.classList.contains('is-open')) closeDrawer();
     });
     apply();
+    if (new URLSearchParams(window.location.search).get('filters') === '1' && isMobile()) openDrawer();
   };
 
 })(window.KRASKU);
