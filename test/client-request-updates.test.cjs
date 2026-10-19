@@ -12,11 +12,12 @@ test('краткая заявка на главной запрашивает о�
   assert.match(shortForm, /for="req-phone">Телефон <span class="req">\*<\/span><\/label>\s*<input id="req-phone" name="phone" type="tel"[^>]*required>/);
   assert.match(shortForm, /for="req-email">Email <span class="req">\*<\/span><\/label>\s*<input id="req-email" name="email" type="email" required>/);
   assert.match(shortForm, /for="req-product-type">Марка или тип материала <span class="req">\*<\/span><\/label>\s*<input id="req-product-type" name="productType" type="text" placeholder="Например: Краска резиновая" required>/);
+  assert.match(shortForm, /<div class="field">\s*<label class="field-label" for="req-product-type">/);
   assert.match(shortForm, /for="req-comment">Комментарий<\/label>\s*<textarea id="req-comment" name="comment"/);
   assert.doesNotMatch(shortForm, /req-org|req-inn/);
 });
 
-test('шапка и плавающая кнопка открывают краткую заявку с выбором типа клиента', () => {
+test('шапка и плавающая кнопка открывают краткую и подробную заявки с выбором типа клиента', () => {
   const layout = read('js/layout.js');
   const ui = read('js/ui.js');
 
@@ -28,7 +29,15 @@ test('шапка и плавающая кнопка открывают крат�
   assert.match(ui, /Юридическое лицо/);
   assert.match(ui, /data-short-request-role/);
   const modal = ui.slice(ui.indexOf('ns.shortRequestModal'), ui.indexOf('/* ---------- Единая заявка по нескольким товарам ---------- */'));
-  assert.doesNotMatch(modal, /Организация|ИНН/);
+  const shortModalForm = modal.slice(modal.indexOf('data-short-request-form="short"'), modal.indexOf('data-short-request-form="full"'));
+  assert.doesNotMatch(shortModalForm, /Организация|ИНН/);
+  assert.match(modal, /<div class="field"><label class="field-label" for="f-productType">/);
+  assert.match(modal, /data-short-request-form="short"/);
+  assert.match(modal, /data-short-request-form="full"/);
+  assert.match(modal, /data-short-request-form-toggle="short"/);
+  assert.match(modal, /data-short-request-form-toggle="full"/);
+  assert.match(modal, /Выберите комплектацию/);
+  assert.match(modal, /Прикрепить файл \/ ТЗ/);
 });
 
 test('формы с ФИО и телефоном требуют Email', () => {

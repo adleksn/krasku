@@ -313,14 +313,37 @@ window.KRASKU = window.KRASKU || {};
       + '<div class="segmented" role="group" aria-label="Тип клиента">'
       + '<button type="button" data-short-request-role="individual" aria-pressed="true">Физическое лицо</button>'
       + '<button type="button" data-short-request-role="legal" aria-pressed="false">Юридическое лицо</button>'
+      + '</div>'
+      + '<div class="segmented" role="group" aria-label="Тип заявки">'
+      + '<button type="button" data-short-request-form-toggle="short" aria-pressed="true">Краткая заявка</button>'
+      + '<button type="button" data-short-request-form-toggle="full" aria-pressed="false">Подробная заявка</button>'
       + '</div></div>'
-      + '<form data-request-form novalidate><div class="form-grid">'
+      + '<form data-short-request-form="short" data-request-form novalidate><div class="form-grid">'
       + ns.field('ФИО', 'name', 'text', true)
       + ns.field('Телефон', 'phone', 'tel', true)
       + ns.field('Email', 'email', 'email', true)
-      + '<div class="field span-2"><label class="field-label" for="f-productType">Марка или тип материала <span class="req">*</span></label><input id="f-productType" name="productType" type="text" placeholder="Например: Краска резиновая" required></div>'
+      + '<div class="field"><label class="field-label" for="f-productType">Марка или тип материала <span class="req">*</span></label><input id="f-productType" name="productType" type="text" placeholder="Например: Краска резиновая" required></div>'
       + '<div class="span-2">' + ns.field('Комментарий', 'comment', 'textarea') + '</div>'
-      + '</div></form>';
+      + '</div></form>'
+      + '<form data-short-request-form="full" data-request-form novalidate hidden>'
+      + '<h4>Контактные данные</h4><div class="form-grid">'
+      + '<div class="field"><label class="field-label" for="f-full-name">ФИО <span class="req">*</span></label><input id="f-full-name" name="name" type="text" required></div>'
+      + '<div class="field"><label class="field-label" for="f-full-phone">Телефон <span class="req">*</span></label><input id="f-full-phone" name="phone" type="tel" required></div>'
+      + '<div class="field"><label class="field-label" for="f-full-email">Email <span class="req">*</span></label><input id="f-full-email" name="email" type="email" required></div>'
+      + '<div class="field" data-short-request-legal hidden><label class="field-label" for="f-full-org">Организация</label><input id="f-full-org" name="org" type="text" disabled></div>'
+      + '<div class="field" data-short-request-legal hidden><label class="field-label" for="f-full-inn">ИНН</label><input id="f-full-inn" name="inn" type="text" placeholder="Заполните, если нужен счет" disabled></div>'
+      + '<div class="field"><label class="field-label" for="f-full-city">Место получения</label><input id="f-full-city" name="city" type="text" placeholder="Адрес терминала ТК или адрес курьеру"></div>'
+      + '</div><h4>Данные по продукции</h4><div class="form-grid">'
+      + '<div class="field"><label class="field-label" for="f-full-package">Выберите комплектацию</label><select id="f-full-package" name="package"><option value="">Не выбрана</option><option>Самостоятельный товар</option><option>Эмаль + Грунт</option><option>Краска + Грунтовка</option></select></div>'
+      + '<div class="field"><label class="field-label" for="f-full-type">Тип продукта</label><select id="f-full-type" name="productType"><option value="">Не выбран</option><option>Эмаль</option><option>Грунтовка</option><option>Грунт-эмаль</option><option>Краска</option><option>Лак</option><option>Растворитель</option><option>Разбавитель</option><option>Отвердитель</option></select></div>'
+      + '<div class="field"><label class="field-label" for="f-full-brand">Марка или тип материала <span class="req">*</span></label><input id="f-full-brand" name="brand" type="text" placeholder="Например: Краска резиновая" required></div>'
+      + '<div class="field"><label class="field-label" for="f-full-surface">Поверхность</label><select id="f-full-surface" name="surface"><option value="">Не выбрана</option><option>Металл</option><option>Дерево</option><option>Бетон</option><option>Ржавчина</option><option>Минеральные основания</option></select></div>'
+      + '<div class="field"><label class="field-label" for="f-full-purpose">Назначение</label><select id="f-full-purpose" name="purpose"><option value="">Не выбрано</option><option>Наружная</option><option>Внутренняя</option><option>Универсальная</option></select></div>'
+      + '<div class="field"><label class="field-label" for="f-full-color">Цвет</label><input id="f-full-color" name="color" type="text" placeholder="Номер цвета, при наличии"></div>'
+      + '<div class="field"><label class="field-label" for="f-full-qty">Необходимое количество</label><input id="f-full-qty" name="quantity" type="text" placeholder="Например: 60 кг"></div>'
+      + '<div class="field span-2"><label class="field-label" for="f-full-comment">Комментарий</label><textarea id="f-full-comment" name="comment" placeholder="Опишите задачу подробнее"></textarea></div>'
+      + '<div class="field span-2"><label class="field-label" for="f-full-file">Прикрепить файл / ТЗ</label><input id="f-full-file" name="file" type="file"><span class="hint">PDF, DOC, XLS, DWG — до 10 МБ</span></div>'
+      + '</div><label class="consent-field"><input name="personalDataConsent" type="checkbox" required disabled> <span>Согласен на обработку персональных данных</span></label></form>';
 
     var dialog = ns.openModal({
       title: 'Краткая заявка',
@@ -329,18 +352,45 @@ window.KRASKU = window.KRASKU || {};
       body: body,
       foot: '<button type="submit" class="btn btn-primary btn-lg btn-block" data-request-submit>Отправить заявку</button>'
     });
-    var form = dialog.querySelector('[data-request-form]');
+    var activeForm = 'short';
+    var role = 'individual';
+    var forms = dialog.querySelectorAll('[data-short-request-form]');
+    var legalFields = dialog.querySelectorAll('[data-short-request-legal]');
+
+    function syncForm() {
+      forms.forEach(function (form) {
+        var active = form.getAttribute('data-short-request-form') === activeForm;
+        form.hidden = !active;
+        form.querySelectorAll('input, select, textarea').forEach(function (input) {
+          input.disabled = !active || (input.closest('[data-short-request-legal]') && role !== 'legal');
+        });
+      });
+      legalFields.forEach(function (field) { field.hidden = activeForm !== 'full' || role !== 'legal'; });
+      dialog.querySelectorAll('[data-short-request-form-toggle]').forEach(function (btn) {
+        btn.setAttribute('aria-pressed', String(btn.getAttribute('data-short-request-form-toggle') === activeForm));
+      });
+    }
 
     dialog.querySelectorAll('[data-short-request-role]').forEach(function (btn) {
       btn.addEventListener('click', function () {
+        role = btn.getAttribute('data-short-request-role');
         dialog.querySelectorAll('[data-short-request-role]').forEach(function (item) {
           item.setAttribute('aria-pressed', String(item === btn));
         });
+        syncForm();
       });
     });
+    dialog.querySelectorAll('[data-short-request-form-toggle]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        activeForm = btn.getAttribute('data-short-request-form-toggle');
+        syncForm();
+      });
+    });
+    syncForm();
 
     dialog.querySelector('[data-request-submit]').addEventListener('click', function (e) {
       e.preventDefault();
+      var form = dialog.querySelector('[data-short-request-form="' + activeForm + '"]');
       if (!ns.validateForm(form)) return;
       var data = ns.collectForm(form);
       ns.submitRequest(Object.assign({}, data, {
