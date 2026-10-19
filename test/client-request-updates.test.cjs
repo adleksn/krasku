@@ -20,6 +20,7 @@ test('краткая заявка на главной запрашивает о�
 test('шапка и плавающая кнопка открывают краткую и подробную заявки с выбором типа клиента', () => {
   const layout = read('js/layout.js');
   const ui = read('js/ui.js');
+  const css = read('css/components.css');
 
   assert.match(layout, /btn-kp" data-cta="short-request">Запросить счёт с НДС/);
   assert.match(layout, /floating-request" data-cta="short-request">/);
@@ -38,6 +39,9 @@ test('шапка и плавающая кнопка открывают крат�
   assert.match(modal, /data-short-request-form-toggle="full"/);
   assert.match(modal, /Выберите комплектацию/);
   assert.match(modal, /Прикрепить файл \/ ТЗ/);
+  assert.match(modal, /class="modal-request-section"[\s\S]*?Контактные данные/);
+  assert.match(modal, /class="modal-request-section modal-request-section--products"[\s\S]*?Данные по продукции/);
+  assert.match(css, /\.modal-request-section \+ \.modal-request-section \{[\s\S]*?margin-top: 30px;[\s\S]*?border-top: 1px solid var\(--border\);/);
 });
 
 test('формы с ФИО и телефоном требуют Email', () => {
