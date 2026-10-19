@@ -318,8 +318,6 @@ window.KRASKU = window.KRASKU || {};
       + ns.field('ФИО', 'name', 'text', true)
       + ns.field('Телефон', 'phone', 'tel', true)
       + ns.field('Email', 'email', 'email', true)
-      + '<div class="field" data-short-request-legal hidden><label class="field-label" for="f-org">Организация</label><input id="f-org" name="org" type="text" disabled></div>'
-      + '<div class="field" data-short-request-legal hidden><label class="field-label" for="f-inn">ИНН</label><input id="f-inn" name="inn" type="text" placeholder="Заполните, если нужен счет" disabled></div>'
       + '<div class="field span-2"><label class="field-label" for="f-productType">Марка или тип материала <span class="req">*</span></label><input id="f-productType" name="productType" type="text" placeholder="Например: Краска резиновая" required></div>'
       + '<div class="span-2">' + ns.field('Комментарий', 'comment', 'textarea') + '</div>'
       + '</div></form>';
@@ -332,17 +330,11 @@ window.KRASKU = window.KRASKU || {};
       foot: '<button type="submit" class="btn btn-primary btn-lg btn-block" data-request-submit>Отправить заявку</button>'
     });
     var form = dialog.querySelector('[data-request-form]');
-    var legalFields = dialog.querySelectorAll('[data-short-request-legal]');
 
     dialog.querySelectorAll('[data-short-request-role]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        var legal = btn.getAttribute('data-short-request-role') === 'legal';
         dialog.querySelectorAll('[data-short-request-role]').forEach(function (item) {
           item.setAttribute('aria-pressed', String(item === btn));
-        });
-        legalFields.forEach(function (field) {
-          field.hidden = !legal;
-          field.querySelector('input').disabled = !legal;
         });
       });
     });

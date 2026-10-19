@@ -13,6 +13,7 @@ test('краткая заявка на главной запрашивает о�
   assert.match(shortForm, /for="req-email">Email <span class="req">\*<\/span><\/label>\s*<input id="req-email" name="email" type="email" required>/);
   assert.match(shortForm, /for="req-product-type">Марка или тип материала <span class="req">\*<\/span><\/label>\s*<input id="req-product-type" name="productType" type="text" placeholder="Например: Краска резиновая" required>/);
   assert.match(shortForm, /for="req-comment">Комментарий<\/label>\s*<textarea id="req-comment" name="comment"/);
+  assert.doesNotMatch(shortForm, /req-org|req-inn/);
 });
 
 test('шапка и плавающая кнопка открывают краткую заявку с выбором типа клиента', () => {
@@ -26,6 +27,8 @@ test('шапка и плавающая кнопка открывают крат�
   assert.match(ui, /Физическое лицо/);
   assert.match(ui, /Юридическое лицо/);
   assert.match(ui, /data-short-request-role/);
+  const modal = ui.slice(ui.indexOf('ns.shortRequestModal'), ui.indexOf('/* ---------- Единая заявка по нескольким товарам ---------- */'));
+  assert.doesNotMatch(modal, /Организация|ИНН/);
 });
 
 test('формы с ФИО и телефоном требуют Email', () => {
