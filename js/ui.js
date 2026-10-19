@@ -307,6 +307,60 @@ window.KRASKU = window.KRASKU || {};
     });
   };
 
+  /* ---------- Краткая заявка из шапки и плавающей кнопки ---------- */
+  ns.shortRequestModal = function () {
+    var body = '<div class="request-toggles">'
+      + '<div class="segmented" role="group" aria-label="Тип клиента">'
+      + '<button type="button" data-short-request-role="individual" aria-pressed="true">Физическое лицо</button>'
+      + '<button type="button" data-short-request-role="legal" aria-pressed="false">Юридическое лицо</button>'
+      + '</div></div>'
+      + '<form data-request-form novalidate><div class="form-grid">'
+      + ns.field('ФИО', 'name', 'text', true)
+      + ns.field('Телефон', 'phone', 'tel', true)
+      + ns.field('Email', 'email', 'email', true)
+      + '<div class="field" data-short-request-legal hidden><label class="field-label" for="f-org">Организация</label><input id="f-org" name="org" type="text" disabled></div>'
+      + '<div class="field" data-short-request-legal hidden><label class="field-label" for="f-inn">ИНН</label><input id="f-inn" name="inn" type="text" placeholder="Заполните, если нужен счет" disabled></div>'
+      + '<div class="field span-2"><label class="field-label" for="f-productType">Марка или тип материала <span class="req">*</span></label><input id="f-productType" name="productType" type="text" placeholder="Например: Краска резиновая" required></div>'
+      + '<div class="span-2">' + ns.field('Комментарий', 'comment', 'textarea') + '</div>'
+      + '</div></form>';
+
+    var dialog = ns.openModal({
+      title: 'Краткая заявка',
+      desc: 'Оставьте контакты и материал — менеджер свяжется с вами в течение рабочего дня.',
+      lg: true,
+      body: body,
+      foot: '<button type="submit" class="btn btn-primary btn-lg btn-block" data-request-submit>Отправить заявку</button>'
+    });
+    var form = dialog.querySelector('[data-request-form]');
+    var legalFields = dialog.querySelectorAll('[data-short-request-legal]');
+
+    dialog.querySelectorAll('[data-short-request-role]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var legal = btn.getAttribute('data-short-request-role') === 'legal';
+        dialog.querySelectorAll('[data-short-request-role]').forEach(function (item) {
+          item.setAttribute('aria-pressed', String(item === btn));
+        });
+        legalFields.forEach(function (field) {
+          field.hidden = !legal;
+          field.querySelector('input').disabled = !legal;
+        });
+      });
+    });
+
+    dialog.querySelector('[data-request-submit]').addEventListener('click', function (e) {
+      e.preventDefault();
+      if (!ns.validateForm(form)) return;
+      var data = ns.collectForm(form);
+      ns.submitRequest(Object.assign({}, data, {
+        product: data.productType || 'Заявка с сайта',
+        sku: data.productType || '',
+        submittedAt: new Date().toISOString(),
+        source: 'short-request-modal'
+      }), { title: 'Краткая заявка' });
+      ns.closeModal();
+    });
+  };
+
   /* ---------- Единая заявка по нескольким товарам ---------- */
   ns.requestListModal = function (items) {
     items = Array.isArray(items) ? items : [];

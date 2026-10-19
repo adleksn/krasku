@@ -55,7 +55,7 @@ window.KRASKU = window.KRASKU || {};
       + '<a class="btn-icon btn-compare" href="' + ns.url('compare') + '" aria-label="Сравнение">' + ns.ICONS.compare + badgeHtml(cmpCount) + '</a>'
       + '<a class="btn-icon" href="' + ns.url('requestList') + '" aria-label="Список заявки">' + ns.ICONS.doc + badgeHtml(requestListCount) + '</a>'
       + '<a class="btn-icon" href="' + ns.url('account') + '" aria-label="Личный кабинет">' + ns.ICONS.user + '</a>'
-      + '<button type="button" class="btn btn-primary btn-kp" data-cta="kp">Запросить счёт с НДС</button>'
+      + '<button type="button" class="btn btn-primary btn-kp" data-cta="short-request">Запросить счёт с НДС</button>'
       + '<button type="button" class="btn-icon burger" data-menu-open aria-label="Открыть меню" aria-expanded="false" aria-controls="mobileNav">' + ns.ICONS.menu + '</button>'
       + '</div>'
       + '</div>'
@@ -79,7 +79,7 @@ window.KRASKU = window.KRASKU || {};
       + '</nav>'
       + '<div class="mobile-nav-foot">'
       + '<a class="btn btn-outline" href="tel:88001001199">8 800 100 1199</a>'
-      + '<button type="button" class="btn btn-primary" data-cta="kp">Запросить счёт с НДС</button>'
+      + '<button type="button" class="btn btn-primary" data-cta="short-request">Запросить счёт с НДС</button>'
       + '</div>'
       + '</aside>';
   }
@@ -162,7 +162,7 @@ window.KRASKU = window.KRASKU || {};
       ? '<a class="floating-catalog-filter" href="catalog.html?filters=1" aria-label="Открыть фильтры каталога">' + ns.ICONS.filter + '</a>'
       : '';
     return catalogFilter
-      + '<button type="button" class="floating-request" data-cta="request">' + ns.ICONS.mail + '<span>Заявка</span></button>';
+      + '<button type="button" class="floating-request" data-cta="short-request">' + ns.ICONS.mail + '<span>Заявка</span></button>';
   }
 
   /* ---------- Рендер результатов поиска ---------- */
@@ -282,14 +282,9 @@ window.KRASKU = window.KRASKU || {};
     document.addEventListener('krasku:storechange', syncBadges);
 
     /* CTA-кнопки открывают модалку */
-    document.querySelectorAll('[data-cta="kp"]').forEach(function (btn) {
+    document.querySelectorAll('[data-cta="short-request"]').forEach(function (btn) {
       btn.addEventListener('click', function () {
-        ns.invoiceModal();
-      });
-    });
-    document.querySelectorAll('[data-cta="request"]').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        ns.technologistModal();
+        ns.shortRequestModal();
       });
     });
     document.querySelectorAll('[data-cta="consult"]').forEach(function (btn) {

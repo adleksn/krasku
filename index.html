@@ -112,6 +112,18 @@
                 <label class="field-label" for="req-email">Email <span class="req">*</span></label>
                 <input id="req-email" name="email" type="email" required>
               </div>
+              <div class="field" data-role-field="legal" hidden>
+                <label class="field-label" for="req-org">Организация</label>
+                <input id="req-org" name="org" type="text">
+              </div>
+              <div class="field" data-role-field="legal" hidden>
+                <label class="field-label" for="req-inn">ИНН</label>
+                <input id="req-inn" name="inn" type="text" placeholder="Заполните, если нужен счет">
+              </div>
+              <div class="field span-2">
+                <label class="field-label" for="req-product-type">Марка или тип материала <span class="req">*</span></label>
+                <input id="req-product-type" name="productType" type="text" placeholder="Например: Краска резиновая" required>
+              </div>
               <div class="field span-2">
                 <label class="field-label" for="req-comment">Комментарий</label>
                 <textarea id="req-comment" name="comment" placeholder="Опишите вашу задачу"></textarea>
@@ -303,8 +315,8 @@
   <script src="js/url.js?v=20260911-2"></script>
   <script src="js/catalog-navigation.js?v=20260911"></script>
   <script src="js/store.js"></script>
-  <script src="js/ui.js"></script>
-  <script src="js/layout.js?v=20261014-4"></script>
+  <script src="js/ui.js?v=20261019-1"></script>
+  <script src="js/layout.js?v=20261019-1"></script>
   <script src="js/filters.js?v=20260911-2"></script>
   <script src="js/product.js"></script>
   <script src="js/compare.js"></script>

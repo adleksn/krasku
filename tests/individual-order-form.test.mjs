@@ -51,15 +51,17 @@ test('product page no longer renders hard-coded kit and compatibility side cards
   assert.doesNotMatch(rendered, /kitsHtml\(\)/);
 });
 
-test('site exposes separate technologist and VAT invoice forms outside a product card', async () => {
+test('site keeps specialised forms and routes shared CTAs to the short client request', async () => {
   const ui = await readFile(new URL('../js/ui.js', import.meta.url), 'utf8');
   const layout = await readFile(new URL('../js/layout.js', import.meta.url), 'utf8');
 
   assert.match(ui, /technologistModal/);
   assert.match(ui, /invoiceModal/);
+  assert.match(ui, /shortRequestModal/);
   assert.match(ui, /Подберём краску под вашу задачу/);
   assert.match(ui, /Запросить счёт с НДС/);
   assert.match(ui, /Указать марку/);
   assert.match(layout, /technologistModal/);
-  assert.match(layout, /invoiceModal/);
+  assert.match(layout, /shortRequestModal/);
+  assert.doesNotMatch(layout, /invoiceModal/);
 });

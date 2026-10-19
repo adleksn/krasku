@@ -11,7 +11,21 @@ test('краткая заявка на главной запрашивает о�
   assert.match(shortForm, /for="req-name">ФИО <span class="req">\*<\/span><\/label>\s*<input id="req-name" name="name" type="text" required>/);
   assert.match(shortForm, /for="req-phone">Телефон <span class="req">\*<\/span><\/label>\s*<input id="req-phone" name="phone" type="tel"[^>]*required>/);
   assert.match(shortForm, /for="req-email">Email <span class="req">\*<\/span><\/label>\s*<input id="req-email" name="email" type="email" required>/);
+  assert.match(shortForm, /for="req-product-type">Марка или тип материала <span class="req">\*<\/span><\/label>\s*<input id="req-product-type" name="productType" type="text" placeholder="Например: Краска резиновая" required>/);
   assert.match(shortForm, /for="req-comment">Комментарий<\/label>\s*<textarea id="req-comment" name="comment"/);
+});
+
+test('шапка и плавающая кнопка открывают краткую заявку с выбором типа клиента', () => {
+  const layout = read('js/layout.js');
+  const ui = read('js/ui.js');
+
+  assert.match(layout, /btn-kp" data-cta="short-request">Запросить счёт с НДС/);
+  assert.match(layout, /floating-request" data-cta="short-request">/);
+  assert.match(layout, /\[data-cta="short-request"\][\s\S]*?ns\.shortRequestModal\(\)/);
+  assert.match(ui, /ns\.shortRequestModal = function \(\)/);
+  assert.match(ui, /Физическое лицо/);
+  assert.match(ui, /Юридическое лицо/);
+  assert.match(ui, /data-short-request-role/);
 });
 
 test('формы с ФИО и телефоном требуют Email', () => {
