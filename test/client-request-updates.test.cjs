@@ -65,7 +65,7 @@ test('common contact data and labels use the requested spelling', () => {
   const tinting = read('tinting.html');
   const about = read('about.html');
 
-  assert.match(layout, /8 800 100 1199/);
+  assert.match(layout, /8 800 100 11 99/);
   assert.match(contacts, /8 800 100 11 99/);
   assert.match(contacts, /8 920 127 71 77/);
   assert.match(contacts, /ros-akva@yandex\.ru/);

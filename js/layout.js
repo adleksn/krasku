@@ -49,7 +49,7 @@ window.KRASKU = window.KRASKU || {};
       + '</a>'
       + '<nav class="main-nav" aria-label="Основная навигация">' + navHtml() + '</nav>'
       + '<div class="header-actions">'
-      + '<a class="header-phone" href="tel:88001001199"><b>8 800 100 1199</b><span>Пн–Пт 9:00–17:00</span></a>'
+      + '<div class="header-phone"><a href="tel:88001001199">8 800 100 11 99</a><a href="tel:89201277177">8 920 127 71 77</a><span>Пн–Пт 9:00–17:00</span></div>'
       + '<button type="button" class="btn-icon" data-search-open aria-label="Поиск по каталогу" aria-expanded="false" aria-controls="searchBar">' + ns.ICONS.search + '</button>'
       + '<a class="btn-icon" href="' + ns.url('favorites') + '" aria-label="Избранное">' + ns.ICONS.heart + badgeHtml(favCount) + '</a>'
       + '<a class="btn-icon btn-compare" href="' + ns.url('compare') + '" aria-label="Сравнение">' + ns.ICONS.compare + badgeHtml(cmpCount) + '</a>'
@@ -78,7 +78,8 @@ window.KRASKU = window.KRASKU || {};
       + '<a href="' + ns.url('account') + '">Личный кабинет</a>'
       + '</nav>'
       + '<div class="mobile-nav-foot">'
-      + '<a class="btn btn-outline" href="tel:88001001199">8 800 100 1199</a>'
+      + '<a class="btn btn-outline" href="tel:88001001199">8 800 100 11 99</a>'
+      + '<a class="btn btn-outline" href="tel:89201277177">8 920 127 71 77</a>'
       + '<button type="button" class="btn btn-primary" data-cta="short-request">Запросить счёт с НДС</button>'
       + '</div>'
       + '</aside>';
@@ -295,6 +296,11 @@ window.KRASKU = window.KRASKU || {};
     document.querySelectorAll('[data-cta="tz"]').forEach(function (btn) {
       btn.addEventListener('click', function () {
         ns.technologistModal();
+      });
+    });
+    document.querySelectorAll('[data-cta="partner-request"]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        ns.partnerRequestModal();
       });
     });
     document.querySelectorAll('[data-cta="tinting"]').forEach(function (btn) {

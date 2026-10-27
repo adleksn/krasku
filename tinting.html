@@ -139,15 +139,8 @@
                 <input id="tin-color" name="color" type="text" placeholder="Например: RAL 7016">
               </div>
               <div class="field">
-                <label class="field-label" for="tin-product">Материал</label>
-                <select id="tin-product" name="product">
-                  <option value="">Не выбран</option>
-                  <option>Эмаль ПФ-115</option>
-                  <option>Эмаль АК-511</option>
-                  <option>Грунт-эмаль 3 в 1</option>
-                  <option>Полиуретановая эмаль ПУ-150</option>
-                  <option>Другой / подобрать технологом</option>
-                </select>
+                <label class="field-label" for="tin-product">Марка или тип материала <span class="req">*</span></label>
+                <input id="tin-product" name="product" type="text" placeholder="Например: Фасадная краска" required>
               </div>
               <div class="field">
                 <label class="field-label" for="tin-qty">Количество</label>

@@ -2,17 +2,14 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFile } from 'node:fs/promises';
 
-test('individual order has a dedicated contextual configuration form while fast order remains generic', async () => {
+test('product card keeps the generic fast-order flow', async () => {
   const ui = await readFile(new URL('../js/ui.js', import.meta.url), 'utf8');
   const product = await readFile(new URL('../js/product.js', import.meta.url), 'utf8');
 
-  assert.match(ui, /productConfigurationModal/);
-  assert.match(ui, /Комплектация/);
-  assert.match(ui, /Контакты/);
-  assert.match(product, /Марка:/);
-  assert.match(ui, /configuration/);
-  assert.match(product, /productConfigurationModal/);
+  assert.match(ui, /requestModal/);
   assert.match(product, /openProductRequest\('Быстрый заказ'\)/);
+  assert.doesNotMatch(product, /product-individual-order/);
+  assert.doesNotMatch(product, /product-consult/);
 });
 
 test('individual order has compact client-approved options for water and organic products', async () => {

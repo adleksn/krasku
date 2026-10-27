@@ -307,6 +307,31 @@ window.KRASKU = window.KRASKU || {};
     });
   };
 
+  ns.partnerRequestModal = function () {
+    var dialog = ns.openModal({
+      title: 'Стать партнёром',
+      desc: 'Оставьте контакты и комментарий — менеджер расскажет об условиях сотрудничества.',
+      body: '<form data-partner-request-form novalidate><div class="form-grid">'
+        + ns.field('Телефон', 'phone', 'tel', true)
+        + ns.field('Email', 'email', 'email', true)
+        + '<div class="span-2">' + ns.field('Комментарий', 'comment', 'textarea') + '</div>'
+        + '</div></form>',
+      foot: '<button type="submit" class="btn btn-primary btn-lg btn-block" data-partner-request-submit>Отправить заявку</button>'
+    });
+
+    dialog.querySelector('[data-partner-request-submit]').addEventListener('click', function (e) {
+      e.preventDefault();
+      var form = dialog.querySelector('[data-partner-request-form]');
+      if (!ns.validateForm(form)) return;
+      ns.submitRequest(Object.assign({}, ns.collectForm(form), {
+        product: 'Заявка на партнёрство',
+        submittedAt: new Date().toISOString(),
+        source: 'partner-request'
+      }), { title: 'Стать партнёром' });
+      ns.closeModal();
+    });
+  };
+
   /* ---------- Краткая заявка из шапки и плавающей кнопки ---------- */
   ns.shortRequestModal = function () {
     var body = '<div class="request-toggles">'

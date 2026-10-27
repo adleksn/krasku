@@ -8,7 +8,7 @@ test('contacts page embeds an accessible map for the Yaroslavl address', async (
   assert.match(page, /class="map-frame"/);
   assert.match(page, /<iframe[^>]+title="Карта проезда к KRASKU.RU в Ярославле"/);
   assert.match(page, /https:\/\/yandex\.ru\/map-widget\/v1\//);
-  assert.match(page, /pt=39\.813459,57\.591695,pm2rdm/);
+  assert.match(page, /pt=39\.854036,57\.650411,pm2rdm/);
   assert.match(page, /Ярославль/);
   assert.match(page, /Октября проспект 78, строение 5, офис 11/);
   assert.doesNotMatch(page, /Заводская/);
